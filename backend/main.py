@@ -13,7 +13,7 @@ from openpyxl import load_workbook
 from pydantic import BaseModel, Field
 
 ROOT = Path(__file__).resolve().parents[1]
-SAMPLE = ROOT / "sample-data"
+SAMPLE = ROOT / "sample"
 DB_PATH = ROOT / "data" / "demo.db"
 FRONTEND = ROOT / "frontend"
 TOOLS = ROOT / "tools"
@@ -108,6 +108,25 @@ async def extract(file: UploadFile = File(...)) -> dict[str, Any]:
     return _mock_payload()
 
 
+@app.post("/api/extract/ocr-llm")
+async def extract_ocr_llm(file: UploadFile = File(...)) -> dict[str, Any]:
+    """OCR each page then Ollama llama3.2 text model → products JSON."""
+    raw = await file.read()
+    if not raw:
+        raise HTTPException(400, "Empty file")
+    name = (file.filename or "").lower()
+    if not name.endswith(".pdf"):
+        raise HTTPException(400, "OCR+Ollama path expects a PDF upload")
+    try:
+        from extract_ocr_llm import extract_pdf_ocr_llm
+
+        return extract_pdf_ocr_llm(raw)
+    except RuntimeError as e:
+        raise HTTPException(503, str(e)) from e
+    except Exception as e:
+        raise HTTPException(500, f"OCR/LLM extract failed: {e}") from e
+
+
 @app.get("/api/products")
 def list_products() -> dict[str, Any]:
     conn = get_db()
@@ -142,7 +161,6 @@ def clear_products() -> dict[str, str]:
     return {"status": "cleared"}
 
 
-# ---- clean-export API ----
 def classify_row(r: dict[str, Any]) -> str:
     if str(r.get("status") or "").lower() == "error":
         return "error"
@@ -243,4 +261,4 @@ app.mount(
     StaticFiles(directory=TOOLS / "clean-export", html=True),
     name="clean_export",
 )
-app.mount("/sample-data", StaticFiles(directory=SAMPLE), name="sample_data")
+app.mount("/sample", StaticFiles(directory=SAMPLE), name="sample")

@@ -2,20 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>clean-export</title>
-  <style>
-    body { font-family: system-ui, sans-serif; margin: 1.5rem; max-width: 900px; }
-    pre { background: #f6f6f6; padding: 0.75rem; overflow: auto; max-height: 420px; }
-    button { padding: 0.4rem 0.8rem; margin-right: 0.5rem; }
-  </style>
+  <link rel="stylesheet" href="/static/styles.css" />
 </head>
 <body>
-  <p><a href="/">← pipeline</a></p>
-  <h1>clean-export</h1>
-  <p>Buckets fake extraction rows: ok / null_date / null_amount / error. Writes CSV + cleaned.xlsx under <code>data/exports/</code>.</p>
-  <button type="button" id="preview">Preview</button>
-  <button type="button" id="run">Run export</button>
-  <pre id="out"></pre>
+  <header class="topbar">
+    <div class="brand">clean-export</div>
+    <nav>
+      <a href="/">pipeline</a>
+      <a href="/tools/schema-builder/">schema-builder</a>
+      <a href="/sample/fake_extraction_raw.xlsx">raw sample</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <h1>clean-export</h1>
+      <p class="lead">
+        Buckets rows from <code>sample/fake_extraction_raw.xlsx</code>:
+        ok / null_date / null_amount / error. Writes CSV + cleaned.xlsx under
+        <code>data/exports/</code>.
+      </p>
+      <div class="toolbar">
+        <button type="button" id="preview">Preview</button>
+        <button type="button" id="run" class="secondary">Run export</button>
+      </div>
+      <pre id="out" class="panel"></pre>
+    </section>
+  </main>
+
   <script>
     document.getElementById("preview").onclick = async () => {
       const res = await fetch("/api/clean-export/preview");

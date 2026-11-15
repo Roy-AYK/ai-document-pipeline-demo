@@ -2,25 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>schema-builder</title>
-  <style>
-    body { font-family: system-ui, sans-serif; margin: 1.5rem; max-width: 720px; }
-    textarea { width: 100%; height: 160px; }
-    pre { background: #f6f6f6; padding: 0.75rem; overflow: auto; }
-    button { margin: 0.4rem 0.4rem 0.4rem 0; padding: 0.4rem 0.8rem; }
-  </style>
+  <link rel="stylesheet" href="/static/styles.css" />
 </head>
 <body>
-  <p><a href="/">← pipeline</a></p>
-  <h1>schema-builder</h1>
-  <p>Paste field names (one per line) or JSON array. Builds <code>{ "fields": [{ "name", "type" }] }</code>.</p>
-  <textarea id="input" placeholder="date&#10;total_amount&#10;vendor&#10;or [&#10;  {&quot;name&quot;: &quot;date&quot;, &quot;type&quot;: &quot;string&quot;}&#10;]"></textarea>
-  <div>
-    <label>Default type <input id="dtype" value="string" /></label>
-  </div>
-  <button type="button" id="build">Build</button>
-  <button type="button" id="download">Download schema.json</button>
-  <pre id="out"></pre>
+  <header class="topbar">
+    <div class="brand">schema-builder</div>
+    <nav>
+      <a href="/">pipeline</a>
+      <a href="/tools/clean-export/">clean-export</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <h1>schema-builder</h1>
+      <p class="lead">
+        Paste field names (one per line) or a JSON array. Builds
+        <code>{ "fields": [{ "name", "type" }] }</code>.
+      </p>
+      <textarea id="input" placeholder="date&#10;total_amount&#10;vendor&#10;or [&#10;  {&quot;name&quot;: &quot;date&quot;, &quot;type&quot;: &quot;string&quot;}&#10;]"></textarea>
+      <div class="toolbar">
+        <label>Default type <input id="dtype" type="text" value="string" /></label>
+        <button type="button" id="build">Build</button>
+        <button type="button" id="download" class="secondary">Download schema.json</button>
+      </div>
+      <pre id="out" class="panel"></pre>
+    </section>
+  </main>
+
   <script>
     let schema = { fields: [] };
 

@@ -55,6 +55,62 @@
       "total_amount": "250.00",
       "vendor": "Fake Co. Ltd",
       "status": "completed"
+    },
+    {
+      "request_id": "req-009",
+      "date": "",
+      "total_amount": "",
+      "vendor": "Dummy Supplies",
+      "status": "completed"
+    },
+    {
+      "request_id": "req-010",
+      "date": "2025-08-01",
+      "total_amount": "999.99",
+      "vendor": "Fake Co. Ltd",
+      "status": "completed"
+    },
+    {
+      "request_id": "req-011",
+      "date": "2025-08-15",
+      "total_amount": "15.00",
+      "vendor": "Acme Demo",
+      "status": "error"
+    },
+    {
+      "request_id": "req-012",
+      "date": "15/08/2025",
+      "total_amount": "40.00",
+      "vendor": "Fake Co. Ltd",
+      "status": "completed"
+    },
+    {
+      "request_id": "req-013",
+      "date": "2025-09-01",
+      "total_amount": "N/A",
+      "vendor": "Dummy Supplies",
+      "status": "completed"
+    },
+    {
+      "request_id": "req-014",
+      "date": "2025-09-20",
+      "total_amount": "320.10",
+      "vendor": "Fake Co. Ltd",
+      "status": "completed"
+    },
+    {
+      "request_id": "req-015",
+      "date": "",
+      "total_amount": "75.00",
+      "vendor": "Acme Demo",
+      "status": "completed"
+    },
+    {
+      "request_id": "req-016",
+      "date": "2025-10-05",
+      "total_amount": "110.00",
+      "vendor": "Fake Co. Ltd",
+      "status": "completed"
     }
   ]
 }

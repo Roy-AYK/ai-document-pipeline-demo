@@ -1,6 +1,6 @@
 # ai-document-pipeline-demo
 
-Mock AI document extract → review → confirm → SQLite.
+Mock AI document extract → review → confirm → SQLite. Optional OCR → Ollama (`llama3.2`) path.
 
 ## Run
 
@@ -12,6 +12,8 @@ pip install -r ../requirements.txt
 python ../scripts/generate_sample_data.py
 uvicorn main:app --reload --port 8000
 ```
+
+Optional OCR+Ollama: `ollama pull llama3.2`
 
 Open http://localhost:8000/
 
