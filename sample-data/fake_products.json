@@ -1,0 +1,88 @@
+{
+  "products": [
+    {
+      "name": "LED Driver 30W",
+      "sku": "FK-LD-030",
+      "watt": 30,
+      "price": 12.5,
+      "currency": "USD"
+    },
+    {
+      "name": "LED Driver 50W",
+      "sku": "FK-LD-050",
+      "watt": 50,
+      "price": 18.0,
+      "currency": "USD"
+    },
+    {
+      "name": "LED Driver 100W",
+      "sku": "FK-LD-100",
+      "watt": 100,
+      "price": 29.9,
+      "currency": "USD"
+    },
+    {
+      "name": "Panel Light 40W",
+      "sku": "FK-PL-040",
+      "watt": 40,
+      "price": 22.0,
+      "currency": "USD"
+    },
+    {
+      "name": "Panel Light 60W",
+      "sku": "FK-PL-060",
+      "watt": 60,
+      "price": 31.5,
+      "currency": "USD"
+    },
+    {
+      "name": "Flood Light 150W",
+      "sku": "FK-FL-150",
+      "watt": 150,
+      "price": 45.0,
+      "currency": "USD"
+    },
+    {
+      "name": "Street Light 80W",
+      "sku": "FK-SL-080",
+      "watt": 80,
+      "price": 55.0,
+      "currency": "USD"
+    },
+    {
+      "name": "Downlight 12W",
+      "sku": "FK-DL-012",
+      "watt": 12,
+      "price": 6.8,
+      "currency": "USD"
+    },
+    {
+      "name": "Downlight 18W",
+      "sku": "FK-DL-018",
+      "watt": 18,
+      "price": 8.2,
+      "currency": "USD"
+    },
+    {
+      "name": "Sensor Module A",
+      "sku": "FK-SN-A01",
+      "watt": 2,
+      "price": 4.5,
+      "currency": "USD"
+    },
+    {
+      "name": "Sensor Module B",
+      "sku": "FK-SN-B02",
+      "watt": 3,
+      "price": 5.1,
+      "currency": "USD"
+    },
+    {
+      "name": "Controller Hub",
+      "sku": "FK-CH-001",
+      "watt": 8,
+      "price": 39.0,
+      "currency": "USD"
+    }
+  ]
+}

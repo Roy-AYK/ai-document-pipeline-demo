@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>schema-builder</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 1.5rem; max-width: 720px; }
+    textarea { width: 100%; height: 160px; }
+    pre { background: #f6f6f6; padding: 0.75rem; overflow: auto; }
+    button { margin: 0.4rem 0.4rem 0.4rem 0; padding: 0.4rem 0.8rem; }
+  </style>
+</head>
+<body>
+  <p><a href="/">← pipeline</a></p>
+  <h1>schema-builder</h1>
+  <p>Paste field names (one per line) or JSON array. Builds <code>{ "fields": [{ "name", "type" }] }</code>.</p>
+  <textarea id="input" placeholder="date&#10;total_amount&#10;vendor&#10;or [&#10;  {&quot;name&quot;: &quot;date&quot;, &quot;type&quot;: &quot;string&quot;}&#10;]"></textarea>
+  <div>
+    <label>Default type <input id="dtype" value="string" /></label>
+  </div>
+  <button type="button" id="build">Build</button>
+  <button type="button" id="download">Download schema.json</button>
+  <pre id="out"></pre>
+  <script>
+    let schema = { fields: [] };
+
+    function build() {
+      const raw = document.getElementById("input").value.trim();
+      const dtype = document.getElementById("dtype").value || "string";
+      try {
+        if (raw.startsWith("[")) {
+          const arr = JSON.parse(raw);
+          schema = {
+            fields: arr.map((x) =>
+              typeof x === "string" ? { name: x, type: dtype } : { name: x.name, type: x.type || dtype }
+            ),
+          };
+        } else {
+          const lines = raw.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+          schema = { fields: lines.map((name) => ({ name, type: dtype })) };
+        }
+        document.getElementById("out").textContent = JSON.stringify(schema, null, 2);
+      } catch (e) {
+        document.getElementById("out").textContent = String(e);
+      }
+    }
+
+    document.getElementById("build").onclick = build;
+    document.getElementById("download").onclick = () => {
+      build();
+      const blob = new Blob([JSON.stringify(schema, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "schema.json";
+      a.click();
+    };
+  </script>
+</body>
+</html>

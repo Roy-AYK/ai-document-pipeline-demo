@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Document pipeline demo</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 1.5rem; max-width: 960px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
+    th, td { border: 1px solid #ccc; padding: 0.4rem 0.5rem; }
+    th { background: #f4f4f4; text-align: left; }
+    input { width: 100%; box-sizing: border-box; }
+    .row { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; margin: 0.75rem 0; }
+    button { padding: 0.4rem 0.8rem; cursor: pointer; }
+    #msg { margin-top: 0.75rem; color: #333; }
+    a { margin-right: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>ai-document-pipeline-demo</h1>
+  <p>
+    <a href="/tools/schema-builder/">schema-builder</a>
+    <a href="/tools/clean-export/">clean-export</a>
+  </p>
+  <div class="row">
+    <input type="file" id="file" accept=".pdf,image/*" />
+    <button type="button" id="extract">Extract (mock)</button>
+    <button type="button" id="confirm">Confirm save</button>
+    <button type="button" id="reload">Reload saved</button>
+    <button type="button" id="clear">Clear DB</button>
+  </div>
+  <div id="msg"></div>
+  <table>
+    <thead>
+      <tr>
+        <th>name</th><th>sku</th><th>watt</th><th>price</th><th>currency</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  <h2>Saved in SQLite</h2>
+  <pre id="saved"></pre>
+  <script>
+    let products = [];
+
+    function render() {
+      const tb = document.getElementById("tbody");
+      tb.innerHTML = "";
+      products.forEach((p, i) => {
+        const tr = document.createElement("tr");
+        ["name", "sku", "watt", "price", "currency"].forEach((k) => {
+          const td = document.createElement("td");
+          const inp = document.createElement("input");
+          inp.value = p[k] ?? "";
+          inp.addEventListener("input", () => {
+            products[i][k] = k === "watt" || k === "price" ? Number(inp.value) : inp.value;
+          });
+          td.appendChild(inp);
+          tr.appendChild(td);
+        });
+        tb.appendChild(tr);
+      });
+    }
+
+    async function loadSaved() {
+      const res = await fetch("/api/products");
+      const data = await res.json();
+      document.getElementById("saved").textContent = JSON.stringify(data.products, null, 2);
+    }
+
+    document.getElementById("extract").onclick = async () => {
+      const f = document.getElementById("file").files[0];
+      let res;
+      if (f) {
+        const fd = new FormData();
+        fd.append("file", f);
+        res = await fetch("/api/extract", { method: "POST", body: fd });
+      } else {
+        res = await fetch("/api/extract/mock");
+      }
+      const data = await res.json();
+      if (!res.ok) {
+        document.getElementById("msg").textContent = data.detail || "extract failed";
+        return;
+      }
+      products = data.products;
+      document.getElementById("msg").textContent = "Mock extract loaded (" + products.length + " rows). Edit then Confirm.";
+      render();
+    };
+
+    document.getElementById("confirm").onclick = async () => {
+      const res = await fetch("/api/confirm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ products, source: "mock" }),
+      });
+      const data = await res.json();
+      document.getElementById("msg").textContent = res.ok ? "Saved " + data.saved : (data.detail || "save failed");
+      await loadSaved();
+    };
+
+    document.getElementById("reload").onclick = loadSaved;
+    document.getElementById("clear").onclick = async () => {
+      await fetch("/api/products", { method: "DELETE" });
+      document.getElementById("msg").textContent = "DB cleared";
+      await loadSaved();
+    };
+
+    loadSaved();
+  </script>
+</body>
+</html>

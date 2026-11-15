@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>clean-export</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 1.5rem; max-width: 900px; }
+    pre { background: #f6f6f6; padding: 0.75rem; overflow: auto; max-height: 420px; }
+    button { padding: 0.4rem 0.8rem; margin-right: 0.5rem; }
+  </style>
+</head>
+<body>
+  <p><a href="/">← pipeline</a></p>
+  <h1>clean-export</h1>
+  <p>Buckets fake extraction rows: ok / null_date / null_amount / error. Writes CSV + cleaned.xlsx under <code>data/exports/</code>.</p>
+  <button type="button" id="preview">Preview</button>
+  <button type="button" id="run">Run export</button>
+  <pre id="out"></pre>
+  <script>
+    document.getElementById("preview").onclick = async () => {
+      const res = await fetch("/api/clean-export/preview");
+      document.getElementById("out").textContent = JSON.stringify(await res.json(), null, 2);
+    };
+    document.getElementById("run").onclick = async () => {
+      const res = await fetch("/api/clean-export/run", { method: "POST" });
+      document.getElementById("out").textContent = JSON.stringify(await res.json(), null, 2);
+    };
+  </script>
+</body>
+</html>
